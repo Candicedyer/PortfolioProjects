@@ -1,0 +1,84 @@
+SELECT *
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+
+ --Delete Nulls from Date
+
+ DELETE FROM [Portfolio Project].[dbo].[scanner_data$]
+ WHERE Date is null
+
+ --Convert Date format
+
+ SELECT Date, CONVERT(Date, Date)
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+
+ --Alter and Update the table
+
+ ALTER TABLE [Portfolio Project].[dbo].[scanner_data$]
+ ADD DateConverted Date;
+ UPDATE [Portfolio Project].[dbo].[scanner_data$]
+ SET DateConverted = CONVERT(Date, Date)
+
+ --Check my work
+
+ SELECT DateConverted
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+
+
+ --Calculate total sales per month 
+
+ SELECT YEAR(DateConverted) AS Year,
+ MONTH(DateConverted) AS MONTH, SUM(Sales_Amount)
+ AS Total_Sales_Per_Month FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY Year(DateConverted), MONTH(DateConverted)
+ ORDER BY Total_Sales_Per_Month DESC
+
+
+
+ --Calculate which customers have highest sales
+
+ SELECT TOP 100 Customer_ID, SUM(Sales_Amount) AS Total_Sales
+  FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY Customer_ID 
+ ORDER BY SUM(Sales_Amount) DESC
+
+ --Calculate which customers had the most orders
+
+ SELECT TOP 100 Customer_ID, COUNT(Transaction_ID) AS Number_of_Orders
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY Customer_ID 
+ ORDER BY COUNT(Transaction_ID) DESC
+
+
+
+ --top 10 Best and worst selling products by SKU
+ 
+ --Best
+ 
+SELECT TOP 10 SKU, SUM(Sales_Amount) AS Total_SKU_Sales 
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY SKU 
+ ORDER BY SUM(Sales_Amount) DESC
+
+ --Worst
+ SELECT TOP 10 SKU, SUM(Sales_Amount) AS Total_SKU_Sales 
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY SKU 
+ ORDER BY SUM(Sales_Amount) ASC
+
+
+ --Top 10 Best and Worst selling products by SKU category
+
+ --Best
+
+ SELECT TOP 10 SKU_Category, SUM(Sales_Amount) AS Total_Sales_By_SKUCategory
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY SKU_Category
+ ORDER BY SUM(Sales_Amount) DESC
+
+
+ --Worst
+ SELECT TOP 10 SKU_Category, SUM(Sales_Amount) AS Total_Sales_By_SKUCategory
+ FROM [Portfolio Project].[dbo].[scanner_data$]
+ GROUP BY SKU_Category
+ ORDER BY SUM(Sales_Amount) ASC
+
