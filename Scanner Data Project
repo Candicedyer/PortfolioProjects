@@ -30,7 +30,7 @@ SELECT *
  MONTH(DateConverted) AS MONTH, SUM(Sales_Amount)
  AS Total_Sales_Per_Month FROM [Portfolio Project].[dbo].[scanner_data$]
  GROUP BY Year(DateConverted), MONTH(DateConverted)
- ORDER BY Total_Sales_Per_Month DESC
+ ORDER BY MONTH ASC
 
 
 
