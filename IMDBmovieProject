@@ -86,12 +86,12 @@ FROM Movies
 group by certificate 
 order by total DESC
 
- --top 5 best years--
+ --Best years for movies--
  SELECT year, COUNT(year) AS Number_of_Movies_Per_Year
  FROM Movies
  GROUP BY year
  ORDER BY COUNT(year) DESC
- Limit 5
+ Limit 10
 
 --how many movies in each decade--
 SELECT 
