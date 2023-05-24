@@ -62,7 +62,7 @@ SELECT name, box_office
 
 
 
- --Most popular genre--
+ --Most popular genres--
 SELECT genre, COUNT(*) AS genre_count
 FROM (
   SELECT TRIM(value) AS genre
@@ -71,7 +71,7 @@ FROM (
 )
 GROUP BY genre
 ORDER BY genre_count DESC
-LIMIT 1
+LIMIT 5
 
 
  --top 10 directors--
