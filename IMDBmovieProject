@@ -34,8 +34,10 @@ SET budget = REPLACE(budget, 550000000, 6700000)
 
 
 --retrieve the outcome--
-SELECT * 
+SELECT name, budget
 FROM Movies
+ORDER BY budget DESC
+LIMIT 5
 
 
 --Top 5 rated movies--
