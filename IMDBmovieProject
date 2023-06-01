@@ -96,6 +96,17 @@ order by total DESC
  Limit 10
 
 --how many movies in each decade--
+
+SELECT 
+    year/10 * 10 + 1 as decade_start,
+    year/10 * 10 + 10 as decade_end,
+    COUNT(year) as number_of_movies
+FROM  Movies
+GROUP BY year/10 
+ORDER BY decade_start
+
+**for visualization purposes it makes sense to keep the decade in one column so combining them utilizing the concat function gives us that ability 
+
 SELECT
     decade_start || ' - ' || decade_end as decade,
     COUNT(year) as number_of_movies
@@ -134,6 +145,35 @@ SELECT decade_start, decade_end, genre
 FROM decade_max_genre
 WHERE rn = 1
 ORDER BY decade_start
+
+** as with the previous query for visualization purposes lets combine the decade_start and decade_end into 1 column 
+
+WITH genre_counts AS (
+  SELECT genre, COUNT(*) AS genre_count, year
+  FROM (
+    SELECT TRIM(value) AS genre, year
+    FROM Movies
+    CROSS JOIN json_each('["' || REPLACE(genre, ',', '","') || '"]')
+  )
+  GROUP BY genre, year
+), decade_max_genre AS (
+  SELECT 
+    d.decade_start || ' - ' || d.decade_end AS decade,
+    gc.genre,
+    ROW_NUMBER() OVER (PARTITION BY d.decade_start ORDER BY gc.genre_count DESC) AS rn
+  FROM (
+    SELECT 
+      (year/10) * 10 + 1 AS decade_start,
+      (year/10) * 10 + 10 AS decade_end
+    FROM Movies
+    GROUP BY year/10
+  ) d
+  JOIN genre_counts gc ON gc.year >= d.decade_start AND gc.year <= d.decade_end
+)
+SELECT decade, genre
+FROM decade_max_genre
+WHERE rn = 1
+ORDER BY decade
 
 
 
