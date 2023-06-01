@@ -96,12 +96,17 @@ order by total DESC
  Limit 10
 
 --how many movies in each decade--
-SELECT 
-    year/10 * 10 + 1 as decade_start,
-    year/10 * 10 + 10 as decade_end,
+SELECT
+    decade_start || ' - ' || decade_end as decade,
     COUNT(year) as number_of_movies
-FROM  Movies
-GROUP BY year/10 
+FROM (
+    SELECT 
+        (year/10) * 10 + 1 as decade_start,
+        (year/10) * 10 + 10 as decade_end,
+        year
+    FROM Movies
+) AS subquery
+GROUP BY decade_start
 ORDER BY decade_start
 
 --most popular movie genre in each decade--
